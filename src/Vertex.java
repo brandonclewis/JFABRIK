@@ -22,6 +22,26 @@ public class Vertex {
 	}
 	
 	/**
+	 * Coordinate constructor. Sets all coordinates to the specified values.
+	 * 
+	 * @param x the x coordinate
+	 * @param y the y coordinate
+	 * @param z the z coordinate
+	 */
+	protected Vertex(double x, double y, double z) {
+		setLocation(x,y,z);
+	}
+	
+	/**
+	 * Clone constructor. Sets all coordinates to that of a specified vertex.
+	 * 
+	 * @param v the vertex to copy
+	 */
+	protected Vertex(Vertex v) {
+		setLocation(v);
+	}
+	
+	/**
 	 * Get the X coordinate.
 	 * 
 	 * @return the x coordinate
