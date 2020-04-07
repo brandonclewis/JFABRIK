@@ -42,6 +42,18 @@ public class Vertex {
 	}
 	
 	/**
+	 * Gets a specified coordinate.
+	 * @param the dimension n of the coordinate
+	 * @return the n coordinate
+	 */
+	public double getN(char n) {
+		if(n == 'x') return x;
+		if(n == 'y') return y;
+		if(n == 'z') return z;
+		return 0.0;
+	}
+	
+	/**
 	 * Get the X coordinate.
 	 * 
 	 * @return the x coordinate
