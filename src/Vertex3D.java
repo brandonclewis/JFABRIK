@@ -4,7 +4,7 @@
  */
 
 
-public class Vertex {
+public class Vertex3D extends Vertex2D{
 	/**
 	 * Internal coordinate storage.
 	 */
@@ -15,7 +15,7 @@ public class Vertex {
 	/**
 	 * Default constructor. Sets all coordinates to zero.
 	 */
-	protected Vertex() {
+	protected Vertex3D() {
 		x=0;
 		y=0;
 		z=0;
@@ -28,7 +28,8 @@ public class Vertex {
 	 * @param y the y coordinate
 	 * @param z the z coordinate
 	 */
-	protected Vertex(double x, double y, double z) {
+	protected Vertex3D(double x, double y, double z) {
+		super(x,y);
 		setLocation(x,y,z);
 	}
 	
@@ -37,7 +38,8 @@ public class Vertex {
 	 * 
 	 * @param v the vertex to copy
 	 */
-	protected Vertex(Vertex v) {
+	protected Vertex3D(Vertex3D v) {
+		super(v);
 		setLocation(v);
 	}
 	
@@ -51,24 +53,6 @@ public class Vertex {
 		if(n == 'y') return y;
 		if(n == 'z') return z;
 		return 0.0;
-	}
-	
-	/**
-	 * Get the X coordinate.
-	 * 
-	 * @return the x coordinate
-	 */
-	public double getX() {
-		return x;
-	}
-	
-	/**
-	 * Get the Y coordinate.
-	 * 
-	 * @return the y coordinate
-	 */
-	public double getY() {
-		return y;
 	}
 	
 	/**
@@ -98,7 +82,7 @@ public class Vertex {
 	 * 
 	 * @param v the vertex to copy
 	 */
-	public void setLocation(Vertex v) {
+	public void setLocation(Vertex3D v) {
 		setLocation(v.getX(),v.getY(),v.getZ());
 	}
 	
@@ -120,7 +104,7 @@ public class Vertex {
 	 * @param v the vertex to find the distance to
 	 * @return the distance from this vertex to v
 	 */
-	public double distance(Vertex v) {
+	public double distance(Vertex3D v) {
 		return distance(v.getX(),v.getY(),v.getZ());
 	}
 	
@@ -132,7 +116,7 @@ public class Vertex {
 	 */
 	public boolean equals(Object o) {
 		if(o == null || getClass() != o.getClass()) return false;
-		Vertex v = (Vertex) o;
+		Vertex3D v = (Vertex3D) o;
 		return getX() == v.getX() && getY() == v.getY() && getZ() == v.getZ();
 	}
 }
