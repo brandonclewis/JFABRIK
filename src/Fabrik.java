@@ -1,19 +1,13 @@
 
 public class Fabrik {
-	/*public static void main(String args[]) {
-		Vertex2D[] limb = {new Vertex2D(0,0), new Vertex2D(1,1), new Vertex2D(2,1), new Vertex2D(3,0)};
-		limb = solveLimb(limb, new Vertex2D(2,-1));
-		for(int i=0;i<limb.length;i++) {
-			System.out.print("(" + limb[i].getX() + "," + limb[i].getY() + ") ");
-		}
-	}*/
+	public static void main(String args[]) {
+		Vertex3D[] limb = {new Vertex3D(0,0,0), new Vertex3D(1,1,0), new Vertex3D(2,1,0), new Vertex3D(3,1,0)};
+	}
 	
 	/**
 	 * Constant for the margin of error for acceptable closeness of the end point in the limb to the target.
 	 */
 	public static final double MARGIN_OF_ERROR = 0.01;
-	
-	//3 dimensional algorithms
 	
 	/**
 	 * Simple FABRIK algorithm. Supports no constraints. Returns an array of vertices ordered from a rigid base to end point.
@@ -24,6 +18,7 @@ public class Fabrik {
 	 */
 	public static Vertex3D[] solveLimb(Vertex3D[] limb, Vertex3D target) {
 		if(limb[limb.length-1].distance(target) < MARGIN_OF_ERROR) return limb;
+		if(lengthOfLimb(limb) < limb[0].distance(target)) return solveLimb(limb,pointAlongVector(limb[0],target,lengthOfLimb(limb)));
 		
 		Vertex3D[] forward = new Vertex3D[limb.length];
 		Vertex3D currentTarget = new Vertex3D(target);
@@ -46,23 +41,6 @@ public class Fabrik {
 	}
 	
 	/**
-	 * Returns the point a set distance from the starting point in the direction of the end point.
-	 * 
-	 * @param start the vertex to start with
-	 * @param end the vertex to end the vector
-	 * @param distance the distance along the vector to place the point
-	 * @return the point a set distance on the vector from start to end
-	 */
-	public static Vertex3D pointAlongVector(Vertex3D start, Vertex3D end, double distance) {
-		double[] coordinates = new double[3];
-		for(int i='x';i<='z';i++)
-			coordinates[i-'x'] = start.getN((char)i) - (distance)/(start.distance(end)) * (start.getN((char)i)-end.getN((char)i));
-		return new Vertex3D(coordinates[0],coordinates[1],coordinates[2]);
-	}
-	
-	//2 dimensional algorithms
-	
-	/**
 	 * solveLimb modified to work with {@link Vertex2D#}.
 	 * 
 	 * @param limb the initial array of vertices
@@ -71,6 +49,7 @@ public class Fabrik {
 	 */
 	public static Vertex2D[] solveLimb(Vertex2D[] limb, Vertex2D target) {
 		if(limb[limb.length-1].distance(target) < MARGIN_OF_ERROR) return limb;
+		if(lengthOfLimb(limb) < limb[0].distance(target)) return solveLimb(limb,pointAlongVector(limb[0],target,lengthOfLimb(limb)));
 		
 		Vertex2D[] forward = new Vertex2D[limb.length];
 		Vertex2D currentTarget = new Vertex2D(target);
@@ -91,6 +70,21 @@ public class Fabrik {
 		}
 		return solveLimb(backward,target);
 	}
+		
+	/**
+	 * Returns the point a set distance from the starting point in the direction of the end point.
+	 * 
+	 * @param start the vertex to start with
+	 * @param end the vertex to end the vector
+	 * @param distance the distance along the vector to place the point
+	 * @return the point a set distance on the vector from start to end
+	 */
+	public static Vertex3D pointAlongVector(Vertex3D start, Vertex3D end, double distance) {
+		double[] coordinates = new double[3];
+		for(int i='x';i<='z';i++)
+			coordinates[i-'x'] = start.getN((char)i) - (distance)/(start.distance(end)) * (start.getN((char)i)-end.getN((char)i));
+		return new Vertex3D(coordinates[0],coordinates[1],coordinates[2]);
+	}
 	
 	/**
 	 * pointAlongVector modified to work with {@link=Vertex2D#}.
@@ -105,5 +99,31 @@ public class Fabrik {
 		for(int i='x';i<='y';i++)
 			coordinates[i-'x'] = start.getN((char)i) - (distance)/(start.distance(end)) * (start.getN((char)i)-end.getN((char)i));
 		return new Vertex2D(coordinates[0],coordinates[1]);
+	}
+	
+	/**
+	 * Returns the sum of every distance between vertices.
+	 * 
+	 * @param limb the array of vertices
+	 * @return the length of the limb
+	 */
+	public static double lengthOfLimb(Vertex3D[] limb) {
+		double sum = 0;
+		for(int i=0;i<limb.length-1;i++)
+			sum += limb[i].distance(limb[i+1]);
+		return sum;
+	}
+	
+	/**
+	 * lengthOfLimb modified to work with {@link=Vertex2D#}.
+	 * 
+	 * @param limb the array of vertices
+	 * @return the length of the limb
+	 */
+	public static double lengthOfLimb(Vertex2D[] limb) {
+		double sum = 0;
+		for(int i=0;i<limb.length-1;i++)
+			sum += limb[i].distance(limb[i+1]);
+		return sum;
 	}
 }
