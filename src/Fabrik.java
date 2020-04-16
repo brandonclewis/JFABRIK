@@ -1,7 +1,12 @@
 
 public class Fabrik {
 	public static void main(String args[]) {
-		Vertex3D[] limb = {new Vertex3D(0,0,0), new Vertex3D(1,1,0), new Vertex3D(2,1,0), new Vertex3D(3,1,0)};
+		Vertex3D[] limb = {new Vertex3D(1,1,1), new Vertex3D(2,2,2), new Vertex3D(3,3,3)};
+		
+		limb = optimizedCoplanarSolve(limb,new Vertex3D(3,0,3));
+		/*for(int i=0;i<limb.length;i++) {
+			System.out.println("(" + limb[i].getX() + "," + limb[i].getY() + "," + limb[i].getZ() + ")");
+		}*/
 	}
 	
 	/**
@@ -69,6 +74,32 @@ public class Fabrik {
 				currentTarget = pointAlongVector(currentTarget,forward[i+1],limb[i].distance(limb[i+1]));
 		}
 		return solveLimb(backward,target);
+	}
+	
+	/**
+	 * solveLimb optimized for vertically coplanar points.
+	 * 
+	 * @param limb the initial array of vertices
+	 * @param target the location to move the end of the limb to
+	 * @return the array of vertices describing the new location of each joint
+	 */
+	public static Vertex3D[] optimizedCoplanarSolve(Vertex3D[] limb, Vertex3D target) {
+		Vertex2D[] simplified = new Vertex2D[limb.length];
+		simplified[0] = new Vertex2D(0,limb[0].getY());
+		
+		for(int i=1;i<limb.length;i++)
+			simplified[i] = new Vertex2D(simplified[i-1].getX() + Math.sqrt(Math.pow(limb[i].getX()-limb[i-1].getX(), 2) + Math.pow(limb[i].getZ()-limb[i-1].getZ(), 2)),limb[i].getY());
+		
+		simplified = solveLimb(simplified,new Vertex2D(Math.sqrt(Math.pow(target.getX() - limb[0].getX(),2) + Math.pow(target.getZ() - limb[0].getZ(), 2)),target.getY()));
+
+		Vertex3D[] converted = new Vertex3D[limb.length];
+		converted[0] = limb[0];
+		double angle = Math.atan((limb[limb.length-1].getZ()-limb[0].getZ())/(limb[limb.length-1].getX()-limb[0].getX()));
+		
+		for(int i=1;i<limb.length;i++)
+			converted[i] = new Vertex3D(converted[0].getX() + simplified[i].getX() * Math.cos(angle),simplified[i].getY(),converted[0].getZ() + simplified[i].getX() * Math.sin(angle));
+		
+		return converted;
 	}
 		
 	/**
